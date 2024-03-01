@@ -1,0 +1,55 @@
+---
+title: "delta_plot"
+format: html
+editor: visual
+---
+
+
+```{r}
+deltable = read.csv("delta_hyperparameter_result.csv",sep=",",check.names = FALSE)
+deltable = deltable[,2:ncol(deltable)]
+colnames(deltable)[5] = "p_value0.05"
+deltable$p_value0.05 = as.logical(deltable$p_value0.05)
+```
+
+```{r}
+library(ggplot2)
+library(latex2exp)
+```
+
+
+```{r}
+ggplot(deltable,aes(x=as.factor(delta),y=AUC))+geom_boxplot()+xlab(label=TeX("$delta$"))
+```
+
+```{r}
+ggplot(deltable,aes(x=as.factor(delta),y=log10(HSIC)))+geom_boxplot()+xlab(label=TeX("$delta$"))
+
+```
+```{r}
+ggplot(deltable,aes(x=as.factor(delta),y=p_value))+geom_boxplot()+xlab(label=TeX("$delta$"))
+
+```
+```{r}
+ggplot(deltable,aes(x=as.factor(delta),y=cov_1))+geom_boxplot()+xlab(label=TeX("$delta$"))+ylab(label = TeX("$cor^2$"))
+
+```
+
+```{r}
+res = deltable %>% group_by(delta) %>%
+  summarise(mean_AUC = mean(AUC),
+            mean_AP = mean(AP),
+            mean_HSIC = mean(HSIC),
+            mean_cor = mean(cov_1),
+            sum_count = sum(p_value0.05),
+            sd_AUC = sd(AUC),
+            sd_AP = sd(AP),
+            sd_HSIC = sd(HSIC),
+            sd_cor = sd(cov_1))
+```
+
+```{r}
+res2=round(res,3)
+paste0("$", res2$mean_AP,"\\pm",res2$sd_AP, "$" ,collapse= " & ")
+```
+
