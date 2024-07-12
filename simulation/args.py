@@ -5,8 +5,8 @@ S1 = []
 S2 = []
 
 
-input_dim1 = 1000
-input_dim2 = 100
+input_dim1 = 4
+input_dim2 = 1
 hidden1_dim1 = 48
 hidden1_dim2 = 13
 

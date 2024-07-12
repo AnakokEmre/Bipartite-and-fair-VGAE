@@ -56,7 +56,7 @@ for k in range(100):
     s = np.random.normal(size=(n1,1))
     S = torch.Tensor(s)
     z1 = np.concatenate([s,z],axis=1)
-    z2 =  np.random.normal(loc = 2.5,size=(n2,2))
+    z2 =  np.random.normal(loc = 0,size=(n2,2))
     
 
     adj0=torch.bernoulli(distance_decode(torch.Tensor(z1),torch.Tensor(z2)))
@@ -92,7 +92,7 @@ for k in range(100):
     
     for delta in delta_hyperparameter :
 
-        list_model2 =  [VBGAE(adj_norm) for k in range(10)]
+        list_model2 =  [VBGAE_GRDPG(adj_norm,n1,n2,1) for k in range(10)]
         list_val_roc2 = []
         for model2 in list_model2:
             init_parameters(model2)

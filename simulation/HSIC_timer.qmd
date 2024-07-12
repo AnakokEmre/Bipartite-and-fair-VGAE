@@ -1,0 +1,72 @@
+---
+title: "HSIC_timer_plot"
+format: html
+editor: visual
+---
+
+```{r}
+library(ggplot2)
+library(reshape2)
+RES = read.table("simulation_results/HSIC_timer.csv",header=T,sep=",")
+
+```
+
+```{r}
+RES0 = RES#[RES$H==0,]
+
+melt0 = melt(RES0, id.vars="n",measure.vars=c("time_quick","time_RFF"))
+melt0$group0 = as.factor(melt0$n)
+#ggplot(melt0,aes(x=n,group=group0,y=value,fill=variable))+geom_boxplot()
+
+
+p0=ggplot(melt0, aes(x= n, y=log10(value),group = interaction(as.factor(n),variable),fill=variable,color=variable))+geom_boxplot(width=1000,alpha=0.5)+scale_x_continuous(breaks=unique(RES$n),minor_breaks = 1000*(1:10) ) + labs(y="log10(seconds)",colour = "Method","fill"="Method")+
+       scale_fill_discrete(labels=c('Quick HSIC', 'RFF HSIC'))+ scale_color_discrete(labels=c('Quick HSIC', 'RFF HSIC'))+
+  ggtitle("Time required to compute HSIC")
+p0
+```
+
+```{r}
+RES0 = RES#[RES$H==0,]
+
+melt0 = melt(RES0, id.vars="n",measure.vars=c("time_grad_quick","time_grad_RFF"))
+melt0$group0 = as.factor(melt0$n)
+#ggplot(melt0,aes(x=n,group=group0,y=value,fill=variable))+geom_boxplot()
+
+
+p0_2=ggplot(melt0, aes(x= n, y=log10(value),group = interaction(as.factor(n),variable),fill=variable,color=variable))+geom_boxplot(width=1000,alpha=0.5)+scale_x_continuous(breaks=unique(RES$n),minor_breaks = 1000*(1:10) ) + labs(y="log10(seconds)",colour = "Method","fill"="Method")+
+       scale_fill_discrete(labels=c('Quick HSIC', 'RFF HSIC'))+ scale_color_discrete(labels=c('Quick HSIC', 'RFF HSIC'))+
+  ggtitle("Time required to compute HSIC gradient") #using auto differentiation")
+p0_2
+```
+
+```{r}
+mean(RES$time_quick[RES$n==10000] + RES$time_grad_quick[RES$n==10000])*1000/60
+mean(RES$time_RFF[RES$n==10000] + RES$time_grad_RFF[RES$n==10000])*1000
+```
+
+```{r}
+RES$n2 = RES$n**2
+
+mod0=lm(time_quick+time_grad_quick~n+n2,data=RES)
+summary(mod0)
+predict(mod0,list(n=26000,n2=26000**2))*1000/60/60
+
+mod1 = lm(time_RFF+time_grad_RFF~n+n2,data=RES)
+summary(mod1)
+plot(mod1)
+predict(mod1,list(n=26000,n2=26000**2))*1000
+
+```
+
+```{r}
+RES$squared_error = (RES$res0-RES$res1)**2
+p3=ggplot(RES, aes(x= n, y=log10(squared_error),group = interaction(as.factor(n),H),fill=as.factor(H),color=as.factor(H)))+geom_boxplot(width=500,alpha=0.5)+scale_x_continuous(breaks=unique(RES$n),minor_breaks = 1000*(1:10) ) + labs(y="log10(Squared Error)",colour = "Hypothesis",fill="Hypothesis")+
+       #scale_fill_discrete(labels=c('Quick HSIC', 'RFF HSIC'))+ scale_color_discrete(labels=c('Quick HSIC', 'RFF HSIC'))+
+ggtitle("Estimated Squared Error of the RFF HSIC")
+p3
+```
+
+```{r}
+library(ggpubr)
+ggarrange(p0, p0_2, ncol=2, nrow=1, common.legend = TRUE, legend="bottom")
+```
