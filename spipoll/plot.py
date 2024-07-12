@@ -122,11 +122,11 @@ args.hidden2_dim1 = 4
 args.hidden2_dim2 = 4
 
 
-
+#%%
 ##### REALISISATION DE L'ESPACE LATENT 1 
 
-model = VBGAE2(adj_norm,species_index)
-model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
+model = VBGAE3(adj_norm,species_index,2)
+model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 latent_space1=latent_space1.detach().numpy()
@@ -159,21 +159,29 @@ plt.show()
 
 
 
-latent_space1 = model.mean1.detach().numpy()
-latent_space2 = model.mean2.detach().numpy()
+#%%
+##### REALISISATION DE L'ESPACE LATENT 1 
 
+model = VBGAE3(adj_norm,species_index,2)
+model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+torch.manual_seed(2)
+_,_,latent_space1,latent_space2,_ = model(features1,features2)
+latent_space1=latent_space1.detach().numpy()
+latent_space2=latent_space2.detach().numpy()
 
 fig,axs = plt.subplots(args.hidden2_dim1-1,args.hidden2_dim1-1,figsize = (15,15))
 
 for i in range(args.hidden2_dim1,):
     for j in range(i+1,args.hidden2_dim1,):
+        axs[i,j-1].axvline(0)
+        axs[i,j-1].axhline(0)
         A=axs[i,j-1].scatter(latent_space1[:,i],latent_space1[:,j],
                     label="Collection",s=1,
                     c=np.log10(S0[:,0].numpy()))
         axs[i,j-1].scatter(latent_space2[:,i],latent_space2[:,j],
                     s=5,label="Observed insects",
                     marker="^",c="r")
-
+plt.setp(axs, xlim=(-6,6), ylim=(-6,6))
 
 for i in range(1,args.hidden2_dim1-1):
     for j in range(i):
@@ -198,12 +206,169 @@ cb.ax.xaxis.set_label_position("bottom")
 plt.show()
 
 
-#################
+#%%
+
+model = VBGAE3(adj_norm,species_index,2)
+model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+torch.manual_seed(2)
+_,_,latent_space1,latent_space2,_ = model(features1,features2)
+latent_space1=latent_space1.detach().numpy()
+latent_space2=latent_space2.detach().numpy()
+
+#latent_space1 = model2.mean1.detach().numpy()
+#latent_space2 = model2.mean2.detach().numpy()
+
+
+
+plant_genus = species01.iloc[:,5]
+plant_genus2 = species01.iloc[:,1]
+ax0 = 0
+ax1 = 1
+
+fig = plt.figure()
+ax = fig.add_subplot()
+
+plt.scatter(latent_space1[:,ax0][plant_genus==1],latent_space1[:,ax1][plant_genus==1],
+            label="Trifolium",s=4)
+plt.scatter(latent_space1[:,ax0][plant_genus2==1],latent_space1[:,ax1][plant_genus2==1],
+            label="Leucanthemum",s=4)
+plt.scatter(latent_space2[:,ax0],latent_space2[:,ax1],
+            s=2,label="Observed insects",
+            marker="^",c="r")
+#ax.set_aspect('equal', adjustable='box')
+ax.legend( bbox_to_anchor=(1, -0.1))
+plt.title("Latent space")
+ax.set_box_aspect(1)
+
+
+#frame0 = 2.5
+#plt.setp(ax, xlim=(-frame0,fram0), ylim=(-frame0,frame0))
+
+plt.show()
+
+#%%
+
+model = VBGAE3(adj_norm,species_index,2)
+model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+torch.manual_seed(2)
+_,_,latent_space1,latent_space2,_ = model(features1,features2)
+plant_genus = species01.iloc[:,15]
+plant_genus2 = species01.iloc[:,1]
+latent_space1=latent_space1.detach().numpy()
+latent_space2=latent_space2.detach().numpy()
+frame0 = 3
+fig,axs = plt.subplots(args.hidden2_dim1-1,args.hidden2_dim1-1,figsize = (15,15))
+
+for i in range(args.hidden2_dim1,):
+    for j in range(i+1,args.hidden2_dim1,):
+        axs[i,j-1].axvline(0)
+        axs[i,j-1].axhline(0)
+        A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus==1],latent_space1[:,j][plant_genus==1],
+                    label="Daucus",s=4)
+        A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus2==1],latent_space1[:,j][plant_genus2==1],
+                    label="Leucanthemum",s=4)
+        axs[i,j-1].scatter(latent_space2[:,i],latent_space2[:,j],
+                    s=2,label="Observed insects",
+                    marker="^",c="r",alpha=0.5)
+plt.setp(axs,  xlim=(-frame0,frame0), ylim=(-frame0,frame0))
+
+for i in range(1,args.hidden2_dim1-1):
+    for j in range(i):
+        axs[i,j].axis("off")
+        
+                
+
+for j in range(args.hidden2_dim1-1):
+    axs[0,j].set_title("dim "+str(j+2))
+        
+for i in range(args.hidden2_dim1-1):
+    axs[i,i].set_ylabel("dim " +str(i+1))
+
+
+handles, labels = axs[0,0].get_legend_handles_labels()
+legend=axs[2,0].legend(handles, labels, loc='lower center', prop={'size': 30})
+for handle in legend.legendHandles:
+    handle.set_sizes([160.0])
+#plt.savefig("spipoll_results/Daucus_Leucanthemum_latent_space.pdf")
 
 
 
 
+#%%
+
+model = VBGAE3(adj_norm,species_index,2)
+model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+torch.manual_seed(2)
+_,_,latent_space1,latent_space2,_ = model(features1,features2)
+latent_space1=latent_space1.detach().numpy()
+latent_space2=latent_space2.detach().numpy()
+
+plant_genus = species01.iloc[:,35]
+ax0 = 0
+ax1 = 1
+
+fig = plt.figure()
+ax = fig.add_subplot()
+ax.axvline(0)
+ax.axhline(0)
+plt.scatter(latent_space1[:,ax0][plant_genus==1],latent_space1[:,ax1][plant_genus==1],
+            label="Trifolium",s=20,c = features01["Temperature"][plant_genus==1])
+
+#ax.set_aspect('equal', adjustable='box')
+ax.legend( bbox_to_anchor=(1, -0.1))
+plt.title("Latent space")
+ax.set_box_aspect(1)
+
+
+plt.show()
 
 
 
+#%%
+
+model = VBGAE3(adj_norm,species_index,2)
+model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+torch.manual_seed(2)
+_,_,latent_space1,latent_space2,_ = model(features1,features2)
+latent_space1=latent_space1.detach().numpy()
+latent_space2=latent_space2.detach().numpy()
+plant_genus = species01.iloc[:,35]
+
+fig,axs = plt.subplots(args.hidden2_dim1-1,args.hidden2_dim1-1,figsize = (15,15))
+
+for i in range(args.hidden2_dim1,):
+    for j in range(i+1,args.hidden2_dim1,):
+        axs[i,j-1].axvline(0)
+        axs[i,j-1].axhline(0)
+        axs[i,j-1].scatter(latent_space2[:,i],latent_space2[:,j],
+                    s=2,label="Observed insects",
+                    marker="^",c="r")
+        A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus==1],latent_space1[:,j][plant_genus==1],
+                    label="Senecio",s=4,
+                    c=features01["Temperature"][plant_genus==1])
+
+plt.setp(axs, xlim=(-4,4), ylim=(-4,4))
+
+for i in range(1,args.hidden2_dim1-1):
+    for j in range(i):
+        axs[i,j].axis("off")
+        
+                
+
+for j in range(args.hidden2_dim1-1):
+    axs[0,j].set_title("dim "+str(j+2))
+        
+for i in range(args.hidden2_dim1-1):
+    axs[i,i].set_ylabel("dim " +str(i+1))
+
+
+handles, labels = axs[0,0].get_legend_handles_labels()
+legend=axs[1,0].legend(handles, labels, loc='lower center', prop={'size': 20})
+for handle in legend.legendHandles:
+    handle.set_sizes([60.0])
+cb=fig.colorbar(A,ax= axs[args.hidden2_dim1-2,:args.hidden2_dim1-2],location='top')
+cb.set_label(label=r"Temperature (C°)",size=20)
+cb.ax.xaxis.set_label_position("bottom")
+plt.savefig("spipoll_results/latent_space_temperature.pdf")
+plt.show()
 

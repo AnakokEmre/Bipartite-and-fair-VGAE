@@ -3,7 +3,7 @@ Created on May 2023
 Original code by Daehan Kim
 GitHub Repository https://github.com/DaehanKim/vgae_pytorch/blob/master/LICENSE
 
-Modified by : ANONYMOUS AUTHOR
+Modified by : Emre Anakok
 
 Description : Modified the original code to adapt the VGAE to the bipartite case.
 Copyright (c) 
@@ -118,7 +118,7 @@ import args
 # init model and optimizer
 
 torch.manual_seed(1)
-model = VBGAE2(adj_norm,species_index)
+model = VBGAE3(adj_norm,species_index,2)
 init_parameters(model)
 
 optimizer = Adam(model.parameters(), lr=args.learning_rate)
@@ -192,7 +192,7 @@ stats.gamma.sf(stat1[0].item()*n, stat1[3].item(), scale=stat1[4].item())
 
 ###### Define model2
 torch.manual_seed(2)
-model2 = VBGAE2(adj_norm,species_index)
+model2 = VBGAE3(adj_norm,species_index,2)
 init_parameters(model2)
 
 optimizer = Adam(model2.parameters(), lr=args.learning_rate)
@@ -273,7 +273,7 @@ stats.gamma.sf(stat2[0].item()*n, stat2[3].item(), scale=stat2[4].item())
 
 #np.savetxt("spipoll_results/fair_A_pred3.csv",fair_A_pred3,delimiter=";")
 
-
+#%%
 
 
 result = pandas.DataFrame(columns = ["AUC","AP",
@@ -321,7 +321,7 @@ for k in range(10):
     norm2 = bipartite.shape[0] * bipartite.shape[1] / float((bipartite.shape[0] *bipartite.shape[1] - bipartite.sum()) * 2)
     
     
-    list_model =  [VBGAE2(adj_norm,species_index) for k in range(10)]
+    list_model =  [VBGAE3(adj_norm,species_index,2) for k in range(10)]
     list_val_roc = []
     for model in list_model:
     
@@ -376,7 +376,7 @@ for k in range(10):
     print(result.iloc[k])
     result.to_csv("spipoll_results/spipoll_result.csv")
     
-    list_model2 =  [VBGAE2(adj_norm,species_index) for k in range(10)]
+    list_model2 =  [VBGAE3(adj_norm,species_index,2) for k in range(10)]
     list_val_roc2 = []
     
     for model2 in list_model2:
@@ -440,6 +440,143 @@ for k in range(10):
 
 
 print(result)
+
+##############
+#%%
+
+
+
+adj0=pandas.read_csv("data/net.csv",header=0,sep="\t").to_numpy(dtype=float)
+features01 = pandas.read_csv("data/features.csv",header=0,sep="\t")
+species01 = pandas.read_csv("data/species.csv",header=0,sep="\t")
+
+mean_Temperature,std_Temperature = features01["Temperature"].mean(),features01["Temperature"].std()
+
+features1 = species01.copy()
+features1["Temperature"] = (features01["Temperature"]-mean_Temperature)/std_Temperature
+
+
+features02 = np.eye(adj0.shape[1])
+
+features1  = torch.Tensor(features1.values)
+features2 =  torch.Tensor(features02)
+
+adj_train, train_edges, val_edges, val_edges_false, test_edges, test_edges_false = mask_test_edges(adj0)
+adj_train2=torch.Tensor(adj_train.todense())
+
+
+
+n=adj0.shape[0]
+# Create Model
+pos_weight = float(adj0.shape[0] * adj0.shape[1] - adj0.sum()) / adj0.sum()
+norm = adj0.shape[0] * adj0.shape[1] / float((adj0.shape[0] * adj0.shape[1] - adj0.sum()) * 2)
+
+
+adj_label = adj_train 
+adj_label = sparse_to_tuple(adj_label)
+  
+adj_label = torch.sparse.FloatTensor(torch.LongTensor(adj_label[0].T), 
+                              torch.FloatTensor(adj_label[1]), 
+                              torch.Size(adj_label[2]))
+  
+  
+
+  
+  
+weight_mask = adj_label.to_dense().view(-1) == 1
+weight_tensor = torch.ones(weight_mask.size(0)) 
+weight_tensor[weight_mask] = pos_weight
+
+
+bipartite,val_edges2,val_edges_false2,test_edges2,test_edges_false2=mask_test_edges2(adj_label,species01.to_numpy(), val_edges, val_edges_false, test_edges, test_edges_false)
+
+pos_weight2 = (bipartite.shape[0]*bipartite.shape[1]-bipartite.sum())/(bipartite.sum())
+weight_tensor2 = torch.ones(bipartite.reshape(-1).shape[0]) 
+weight_tensor2[bipartite.reshape(-1)==1] = pos_weight2
+
+norm2 = bipartite.shape[0] * bipartite.shape[1] / float((bipartite.shape[0] *bipartite.shape[1] - bipartite.sum()) * 2)
+
+
+SP = (species01/species01.sum(0)).T.to_numpy()
+SP = torch.Tensor(SP)
+model =  BGAT(features1.shape[1],features2.shape[1],4,4,0.2,10)
+optimizer = Adam(model.parameters(), lr=args.learning_rate)
+roclist = []
+loss_list= []
+
+torch.manual_seed(4)
+pbar = tqdm(range(1000),desc = "Training Epochs")
+for epoch in pbar:
+    t = time.time()
+
+    Z1,Z2 = model(features1,features2,adj_train2)
+    A_pred=distance_decode(Z1,Z2)
+    A_pred2 = SP@A_pred
+    
+    optimizer.zero_grad()
+    loss = norm*F.binary_cross_entropy(A_pred.view(-1), adj_label.to_dense().view(-1), weight = weight_tensor)
+    loss  += norm2*F.binary_cross_entropy(A_pred2.view(-1), torch.Tensor(bipartite).view(-1),weight = weight_tensor2)
+
+    loss.backward()
+    optimizer.step()
+    
+
+    val_roc, val_ap = get_scores(val_edges, val_edges_false, A_pred)
+    val_roc2, val_ap2 = get_scores(val_edges2, val_edges_false2, A_pred2)
+
+    roclist.append(val_roc)
+    loss_list.append(loss.item())
+
+    pbar.set_postfix({"train_loss=": "{:.5f}".format(loss.item()),
+                                 'val_roc=': val_roc,
+                                 "val_roc2=": "{:.5f}".format(val_roc2)})
+
+
+
+
+
+
+model2 =  BGAT(features1.shape[1],features2.shape[1],4,4,0.2,10)
+optimizer = Adam(model2.parameters(), lr=args.learning_rate)
+roclist = []
+loss_list= []
+
+torch.manual_seed(4)
+pbar = tqdm(range(1000),desc = "Training Epochs")
+for epoch in pbar:
+    t = time.time()
+
+    Z1,Z2 = model2(features1,features2,adj_train2)
+    A_pred=distance_decode(Z1,Z2)
+    A_pred2 = SP@A_pred
+    
+    optimizer.zero_grad()
+    loss = norm*F.binary_cross_entropy(A_pred.view(-1), adj_label.to_dense().view(-1), weight = weight_tensor)
+    loss  += norm2*F.binary_cross_entropy(A_pred2.view(-1), torch.Tensor(bipartite).view(-1),weight = weight_tensor2)
+    independance = n*RFF_HSIC(Z1,S)
+    loss += independance
+    loss.backward()
+    optimizer.step()
+    
+
+    val_roc, val_ap = get_scores(val_edges, val_edges_false, A_pred)
+    val_roc2, val_ap2 = get_scores(val_edges2, val_edges_false2, A_pred2)
+
+    roclist.append(val_roc)
+    loss_list.append(loss.item())
+
+    pbar.set_postfix({"train_loss=": "{:.5f}".format(loss.item()),
+                                 'val_roc=': val_roc,
+                                 "val_roc2=": "{:.5f}".format(val_roc2)})
+
+
+stat1 = HSIC_stat(Z1,S)
+p005=stats.gamma.sf(stat1[0].item()*n1, stat1[3].item(), scale=stat1[4].item())
+
+
+
+
+
 
 
 
