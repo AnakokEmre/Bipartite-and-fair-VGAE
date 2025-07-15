@@ -126,7 +126,7 @@ args.hidden2_dim2 = 4
 ##### REALISISATION DE L'ESPACE LATENT 1 
 
 model = VBGAE3(adj_norm,species_index,2)
-model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 latent_space1=latent_space1.detach().numpy()
@@ -163,7 +163,7 @@ plt.show()
 ##### REALISISATION DE L'ESPACE LATENT 1 
 
 model = VBGAE3(adj_norm,species_index,2)
-model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 latent_space1=latent_space1.detach().numpy()
@@ -209,7 +209,7 @@ plt.show()
 #%%
 
 model = VBGAE3(adj_norm,species_index,2)
-model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 latent_space1=latent_space1.detach().numpy()
@@ -249,7 +249,7 @@ plt.show()
 #%%
 
 model = VBGAE3(adj_norm,species_index,2)
-model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 plant_genus = species01.iloc[:,15]
@@ -287,7 +287,7 @@ for i in range(args.hidden2_dim1-1):
 
 handles, labels = axs[0,0].get_legend_handles_labels()
 legend=axs[2,0].legend(handles, labels, loc='lower center', prop={'size': 30})
-for handle in legend.legendHandles:
+for handle in legend.legend_handles:
     handle.set_sizes([160.0])
 #plt.savefig("spipoll_results/Daucus_Leucanthemum_latent_space.pdf")
 
@@ -297,7 +297,7 @@ for handle in legend.legendHandles:
 #%%
 
 model = VBGAE3(adj_norm,species_index,2)
-model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 latent_space1=latent_space1.detach().numpy()
@@ -327,7 +327,7 @@ plt.show()
 #%%
 
 model = VBGAE3(adj_norm,species_index,2)
-model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 latent_space1=latent_space1.detach().numpy()
@@ -364,11 +364,66 @@ for i in range(args.hidden2_dim1-1):
 
 handles, labels = axs[0,0].get_legend_handles_labels()
 legend=axs[1,0].legend(handles, labels, loc='lower center', prop={'size': 20})
-for handle in legend.legendHandles:
+for handle in legend.legend_handles:
     handle.set_sizes([60.0])
 cb=fig.colorbar(A,ax= axs[args.hidden2_dim1-2,:args.hidden2_dim1-2],location='top')
 cb.set_label(label=r"Temperature (C°)",size=20)
 cb.ax.xaxis.set_label_position("bottom")
 plt.savefig("spipoll_results/latent_space_temperature.pdf")
 plt.show()
+
+
+#%%
+
+model = VBGAE3(adj_norm,species_index,2)
+model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
+torch.manual_seed(2)
+_,_,latent_space1,latent_space2,_ = model(features1,features2)
+plant_genus = species01.iloc[:,15]
+plant_genus2 = species01.iloc[:,1]
+plant_genus3 = species01.iloc[:,5]
+
+latent_space1=latent_space1.detach().numpy()
+latent_space2=latent_space2.detach().numpy()
+frame0 = 1.5
+fig,axs = plt.subplots(args.hidden2_dim1-1,args.hidden2_dim1-1,figsize = (15,15))
+
+for i in range(args.hidden2_dim1,):
+    for j in range(i+1,args.hidden2_dim1,):
+        axs[i,j-1].axvline(0)
+        axs[i,j-1].axhline(0)
+        A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus==1],latent_space1[:,j][plant_genus==1],
+                    label="Daucus",s=4,c="C1")
+        A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus2==1],latent_space1[:,j][plant_genus2==1],
+                    label="Leucanthemum",s=4,c="C0")
+        A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus3==1],latent_space1[:,j][plant_genus3==1],
+                    label="Rosmarinus",s=4,c="C2")
+        axs[i,j-1].scatter(latent_space2[:,i],latent_space2[:,j],
+                    s=16,label="Observed insects",
+                    marker="^",c="r",alpha=0.5)
+plt.setp(axs,  xlim=(-frame0,frame0), ylim=(-frame0,frame0))
+
+for i in range(1,args.hidden2_dim1-1):
+    for j in range(i):
+        axs[i,j].axis("off")
+        
+                
+
+    
+    
+for i in range(args.hidden2_dim1-1):
+    for j in range(i,args.hidden2_dim1-1):
+        axs[i,j].set_xlabel("dim "+str(i+1))
+        axs[i,j].set_ylabel("dim "+str(j+2))
+
+
+plt.subplots_adjust(left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0.4,hspace=0.4)
+
+
+handles, labels = axs[0,0].get_legend_handles_labels()
+legend=axs[2,0].legend(handles, labels, loc='lower center', prop={'size': 30})
+for handle in legend.legend_handles:
+    handle.set_sizes([160.0])
+#plt.savefig("spipoll_results/Daucus_Leucanthemum_latent_space.pdf")
+
 
