@@ -93,7 +93,7 @@ We then simulate a test set of 200 observations following the same probability l
 | :--- | :--- | :--- | :--- |
 | **MSE** | $7.16\times 10^{-2} \pm 21.4\times 10^{-2}$ | $9.88 \pm 6.34$ | $8.80 \pm 5.54$ |
 | **HSIC** | $3.15\times 10^{-2} \pm 1.02\times 10^{-2}$ | $1.15\times 10^{-3} \pm 0.60\times 10^{-3}$ | $2.21\times 10^{-3} \pm 4.81\times 10^{-3}$ |
-| **#p < 0.05** | 100/100 | 3/100 | 10/100 |
+| **p < 0.05** | 100/100 | 3/100 | 10/100 |
 | **Correlation** | $0.991 \pm 0.229$ | $0.068 \pm 0.049$ | $0.142 \pm 0.241$ |
 
 
@@ -137,8 +137,8 @@ predict the protected variable $S$. The loss is then penalized if the predicted 
 
 The results for the link prediction task in the simulated network are summarized in Table B.1.2.
 The simulations were done with dataset splits, with 30\% of the edges hidden. 20\% of these hidden edges are used as validation data set, and the remaining 10\% for the test set. Both sets also contain an equivalent amount of non-edges that are not in the train set. We compare the methods with the area under the ROC curve (AUC) score, the $HSIC$ between the latent space $\tilde{Z_1}$ and $S$, 
-the number of times the p-value associated with the HSIC independence test is lower than $0.05\%$ ($\#p_{0.05}$) and the Euclidean norm of the correlation matrix between $\tilde{Z_1}$ and $S$ ($cor$).
-In the table, are reported the mean and standard deviation for 100 trials, except for $\#p_{0.05}$ which is only a count.
+the number of times the p-value associated with the HSIC independence test is lower than $0.05\%$ ($p_{0.05}$) and the Euclidean norm of the correlation matrix between $\tilde{Z_1}$ and $S$ ($cor$).
+In the table, are reported the mean and standard deviation for 100 trials, except for $p_{0.05}$ which is only a count.
 We set the hyperparameter $\delta = n_1$.
 For each trial, the simulations begin with 10 random initializations, and were fit using 1000 iterations of the Adam algorithm with learning rate $ 0.01$, using a computer equipped with an Intel Xeon(R) CPU E5-1650 v4 and 32GB of RAM. The model that achieved the most favorable performance on the validation test set is then selected to evaluate the performance on the test dataset.
 
@@ -148,7 +148,7 @@ For each trial, the simulations begin with 10 random initializations, and were f
 | :--- | :---: | :---: | :---: |
 | **AUC** | $0.753 \pm 0.013$ | $0.664 \pm 0.014$ | $0.668 \pm 0.036$ |
 | **HSIC** | $0.041 \pm 0.002$ | $2.36\times 10^{-6} \pm 1.18\times 10^{-6}$ | $1.57 \times 10^{-3} \pm 3.21 \times 10^{-3}$ |
-| **#p < 0.05** | 100/100 | 0/100 | 81/100 |
+| **p < 0.05** | 100/100 | 0/100 | 81/100 |
 | **cor** | $0.940 \pm 0.022$ | $0.009 \pm 0.006$ | $0.12 \pm 0.195$ |
 
 As expected in a fairness setting, the AUC for link prediction decreases when we penalized the reconstruction with the HSIC, because in our case, $S$ is directly related to the probability of connection between the nodes. However, the latent space given by the BVGAE is not independent of the protected variable $S$. This can be seen by looking at the p-value of the HSIC independence test and the correlation between $\tilde{Z_1}$ and $S$. Even if it is not enough to guarantee independence, we can see that the correlation between the latent space and the protected variable is much higher in the BVGAE than in the fair-BVGAE and ADV model. However, in all the simulations, the independence hypothesis has been rejected for the BVGAE and kept for the fair-BVGAE. The ADV model managed to have a smaller HSIC than the BVGAE, however the independence hypothesis was rejected most of the time. The ADV model is much harder to calibrate because it requires a second neural network to optimize.
@@ -188,7 +188,7 @@ We fit the fair-BVGAE with the variational loss $\mathcal{L}$ with hyperparamete
 
 The results for the link prediction task in the simulated network are summarized in Table B.2.2.
 The simulations were done with  dataset splits, with 30\% of the edges hidden. 20\% of these hidden edges are used as validation data set, and the remaining 10\% for the test set. Both sets also contain an equivalent amount of non-edges that are not in the train set.
-In the table are reported the mean and standard deviation for 100 trials, except for $\#p_{0.05}$ which is only a count.
+In the table are reported the mean and standard deviation for 100 trials, except for $p_{0.05}$ which is only a count.
 
 For each trial, the simulations begin with 10 random initialization, and were fit using 1000 iterations of the Adam algorithm with learning rate $ 0.01$.  The model that achieved the most favorable performance on the validation test set is then selected to evaluate the performance on the test dataset.
 This procedure is repeated on the same network for each value of $\delta$.
@@ -218,7 +218,7 @@ As we see in Table B.2.2, increasing the $\delta$ parameters from 0 to 2000 decr
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **AUC** | $0.758\pm0.009$ | $0.735\pm0.012$ | $0.725\pm0.013$ | $0.724\pm0.012$ | $0.724\pm0.013$ | $0.723\pm0.013$ | $0.708\pm0.031$ |
 | **HSIC** | $3.32 \times 10^{-2} \pm 1.22 \times 10^{-2}$ | $2.75\times 10^{-4} \pm 1.56\times 10^{-4}$ | $1.42 \times 10^{-5} \pm 4.37 \times 10^{-6}$ | $8.63 \times 10^{-6} \pm 2.72 \times 10^{-6}$ | $5.06 \times 10^{-6} \pm 1.65 \times 10^{-6}$ | $3.69 \times 10^{-6} \pm 1.27 \times 10^{-6}$ | $2.64 \times 10^{-6} \pm 1.50 \times 10^{-6}$ |
-| **$\#p < 0.05$** | 100/100 | 44/100 | 0/100 | 0/100 | 0/100 | 0/100 | 0/100 |
+| **$p < 0.05$** | 100/100 | 44/100 | 0/100 | 0/100 | 0/100 | 0/100 | 0/100 |
 | **cor** | $0.735\pm0.206$ | $0.035\pm0.055$ | $0.011\pm0.007$ | $0.011\pm0.008$ | $0.011\pm0.008$ | $0.011\pm0.008$ | $0.017\pm0.025$|
 
 </sub>
@@ -249,7 +249,7 @@ We then fit our bipartite and fair auto-encoder to compare the result and see if
 
 Results for the link prediction task in the simulated network are summarized in Table 3.2.
 The simulations were done with  dataset splits, with 30\% of the edges hidden. 20\% of these hidden edges are used as validation data set, and the remaining 10\% for the test set. Both sets also contain an equivalent amount of non-edges that are not in the train set.
-In the table are reported the mean and standard deviation for 100 trials, except for $\#p_{0.05}$ which is only a count.
+In the table are reported the mean and standard deviation for 100 trials, except for $p_{0.05}$ which is only a count.
 We set the hyperparameter $\delta = n_1=1000$. For each trial, the simulations begin with 10 random initialization, and were fit using 1000 iterations of the Adam algorithm with learning rate $ 0.01$.  The model that achieved the most favorable performance on the validation test set is then selected to evaluate the performance on the test dataset.
 
 <table>
