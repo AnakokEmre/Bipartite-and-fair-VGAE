@@ -93,7 +93,7 @@ The difference between the precedent model is that the encoder takes as input $P
 
   We consider an encoder $f_{W_0}$ with a one layer neural network of 5 input nodes and 2 output nodes, and a decoder $g_{W_1}$ with 2 input nodes and 5 output nodes. We optimize the weights of the auto-encoder with respect to the MSE and HSIC loss: 
 
-$$\mathcal{L}(W_0, W_1) = \frac{1}{n} \vert g_{W_1}(f_{W_0}(X)) - X\vert + \delta RFF\, HSIC(f_{W_0}(X), S)$$
+$$\mathcal{L}(W_0, W_1) = \frac{1}{n} \Vert g_{W_1}(f_{W_0}(X)) - X\Vert + \delta RFF\, HSIC(f_{W_0}(X), S)$$
 
 Here we have chosen $\delta = 10^5$. 
 
@@ -132,8 +132,10 @@ Removing the protected variable $S$ from the original data $X$ has increased the
 ## B.1 Simulation in the simple case
 ### B.1.1 Setting
 
+$$\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}$$
+
 In this simulation, we are going to generate bipartite networks made of $n_1=1000$ rows and $n_2 =100$ columns. 
-Let $S_i\sim \mathcal{N}(0,1)$ i.i.d. for $i = 1,\dots,n_1$ and $T_i \sim \mathcal{N}(0,1)$ i.i.d. for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$.
+Let $S_i\sim \mathcal{N}(0,1)$ i.i.d. for $i = 1,\dots,n_1$ and $T_i \sim \mathcal{N}(0,1)$ i.i.d. for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2 \sim \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$ i.i.d.
 We simulate our bipartite adjacency matrix with a Bernoulli distribution $B_{i,j} \overset{i.i.d.}{\sim} \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.1.1.
 
 First, we fit a classical bipartite and variational graph auto-encoder on $B_{i,j}$. We expect that this auto-encoder would yield a latent representation $\tilde{Z_1}$ correlated with $S$ and $T$. 
