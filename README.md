@@ -307,8 +307,8 @@ The purpose of this study is to see the temporal gain of using the RFF HSIC inst
 
 ### B.4.1 Setting
 
-For various value of $n$, we consider $X$ a $n\times 4$ matrix, with entries such as $X_{i,j} \sim \mathcal{N}(0,1)$ i.i.d.. Let $S$ be a $n \times 4$ matrix. Under the null hypothesis, we consider that $S$ is independent of $X$, with $S_{i,j} \sim \mathcal{N}(0,1)$ i.i.d.. Under the alternative hypothesis we consider that $S= 3X$. The aim is to compute the HSIC between $X$ and $S$ with $\widehat{HSIC}(X,S)$, $RFF\ HSIC(X,S)$ and their respective gradient, under both hypothesis.
-In our fairness setting, $S$ would represent the protected variable and would be fixed once and for all, while $X$ would change according to the computed gradient. Therefore, we evaluate $L_{i,j} = L(s_i,s_j) = e^{-\frac{\Vert s_i-s_j\Vert ^2}{2}}$, $L' = \sum_{1\leq p,q\leq n} L_{q,p}$, and $L''_{i} = \sum_{q =1}^n L_{i,q}$ in advance to perform a quicker computation :  
+For various value of $n$, we consider $X$ a $n\times 4$ matrix, with entries such as $X_{i,j} \sim \mathcal{N}(0,1)$ i.i.d. Let $S$ be a $n \times 4$ matrix. Under the null hypothesis, we consider that $S$ is independent of $X$, with $S_{i,j} \sim \mathcal{N}(0,1)$ i.i.d. Under the alternative hypothesis we consider that $S= 3X$. The aim is to compute the HSIC between $X$ and $S$ with $\widehat{HSIC}(X,S)$, $RFF\ HSIC(X,S)$ and their respective gradient, under both hypothesis.
+In our fairness setting, $S$ would represent the protected variable and would be fixed once and for all, while $X$ would change according to the computed gradient. Therefore, we evaluate $L_{i,j} = L(s_i,s_j) = e^{-\frac{\Vert s_i-s_j\Vert ^2}{2}}$, $L' = \sum_{1\leq p,q\leq n} L_{q,p}$, and $L''\_{i} = \sum\_{q=1}^n L\_{i,q}$ in advance to perform a quicker computation :  
 
 $$\begin{aligned}
 \widehat{HSIC} &= \frac{1}{n^2}\sum_{1\leq i,j\leq n}K_{i,j}L_{i,j} + \frac{1}{n^4}\sum_{1\leq i,j\leq n}K_{i,j} \left( \sum_{1\leq p,q\leq n} L_{p,q} \right) - \frac{2}{n^3}\sum_{1\leq i,j\leq n}K_{i,j} \left( \sum_{q=1}^n L_{i,q} \right) \\
