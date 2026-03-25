@@ -8,7 +8,7 @@ Application on the Spipoll dataset, from 2016 to 2020, is available in the spipo
 # A. The Linear Embedding Case
 
 ## A.1 Overview
-Let $X$ a $n\times d$ matrix and let $S$ be $n \times d_s$ matrix. Without loss of generality, we assume that each column of $X$ has been centered. We wish to perform a one dimensional principal component analysis on $X$ that would yield us a vector $v$ and a lower dimensional embedding of $X$ given by $Xv$ that maximizes the variance. However, we wish to have a latent representation $Xv$ independent of the protected variable $S$.  
+Let $`X`$ a $`n\times d`$ matrix and let $`S`$ be $`n \times d_s`$ matrix. Without loss of generality, we assume that each column of $`X`$ has been centered. We wish to perform a one dimensional principal component analysis on $`X`$ that would yield us a vector $`v`$ and a lower dimensional embedding of $`X`$ given by $`Xv`$ that maximizes the variance. However, we wish to have a latent representation $`Xv`$ independent of the protected variable $`S`$.  
 
 If we were in the context of probabilistic PCA (Tipping and Bishop, 1999)  where $X$ and $S$ would have been multivariate Gaussian, 
 projecting $X$ onto the space orthogonal to $S$: $S^\perp$ beforehand would have been enough to guarantee the independence between $S$ and the latent representation $Xv$, this can be solved using PPCA with covariates (Kalaitzis and Lawrence, 2012). 
@@ -120,7 +120,7 @@ Removing the protected variable $S$ from the original data $X$ has increased the
 
 In this simulation, we are going to generate bipartite networks made of $n_1=1000$ rows and $n_2 =100$ columns. 
 Let $S_i\overset{i.i.d.}{\sim} \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \overset{i.i.d.}{\sim} \mathcal{N} (0,1)$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$.
-We simulate our bipartite adjacency matrix with a Bernoulli distribution $ B_{i,j} \overset{i.i.d.}{\sim} \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.1.1.
+We simulate our bipartite adjacency matrix with a Bernoulli distribution $B_{i,j} \overset{i.i.d.}{\sim} \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.1.1.
 
 First, we fit a classical bipartite and variational graph auto-encoder on $B_{i,j}$. We expect that this auto-encoder would yield a latent representation $\tilde{Z_1}$ correlated with $S$ and $T$. 
 We then fit our bipartite and fair auto-encoder to compare the results and see if the yielded latent space is independent of $S$. We also compare our methodology with an adversarial learning algorithm (ADV) (Zhang et al., 2018)  where the output $\mu_1$ is then used as an input
