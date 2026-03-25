@@ -66,7 +66,7 @@ in other words, we are looking for the eigenvalues of the covariance matrix of $
 
 ## A.4 Comparison of fair linear embedding
 
-Let  $S_i\sim \mathcal{N}(0,1)$ i.i.d. and $T_i\overset{iid}{\sim}\mathcal{N}(0,1)$ for $i \in 1,\dots,n=1000$. Assume that $S \bot T$ and let $Z = (S,T)$. Let $K_{i,j} \sim \mathcal{N}(0,9)$ i.i.d be a $2 \times 5$ matrix. Suppose that we observe the $n \times 5$ matrix $X=ZK$  and the protected variable $S$. 
+Let  $S_i\sim \mathcal{N}(0,1)$ i.i.d. and $T_i\sim \mathcal{N}(0,1)$ i.i.d.for $i \in 1,\dots,n=1000$. Assume that $S \bot T$ and let $Z = (S,T)$. Let $K_{i,j} \sim \mathcal{N}(0,9)$ i.i.d be a $2 \times 5$ matrix. Suppose that we observe the $n \times 5$ matrix $X=ZK$  and the protected variable $S$. 
 
 
 We wish to perform a linear embedding 
