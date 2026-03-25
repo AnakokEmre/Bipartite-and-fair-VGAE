@@ -139,7 +139,7 @@ Let $S_i\sim \mathcal{N}(0,1)$ i.i.d. for $i = 1,\dots,n_1$ and $T_i \sim \mathc
 
 $$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right)$$ 
 
-We simulate our bipartite adjacency matrix with a Bernoulli distribution $B_{i,j} \overset {i.i.d.}{\sim} \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}\_{D\_+,D\_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.1.1.
+We simulate our bipartite adjacency matrix with a Bernoulli distribution $B_{i,j} \sim \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}\_{D\_+,D\_-}z_{2j}))$ i.i.d. A visualization of the simulated latent space is presented in Figure B.1.1.
 
 First, we fit a classical bipartite and variational graph auto-encoder on $B_{i,j}$. We expect that this auto-encoder would yield a latent representation $\tilde{Z_1}$ correlated with $S$ and $T$. 
 We then fit our bipartite and fair auto-encoder to compare the results and see if the yielded latent space is independent of $S$. We also compare our methodology with an adversarial learning algorithm (ADV) (Zhang et al., 2018)  where the output $\mu_1$ is then used as an input
