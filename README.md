@@ -275,7 +275,7 @@ First, we fit a classical bipartite and variational graph auto-encoder on $B_{i,
 We then fit our bipartite and fair auto-encoder to compare the result and see if the yielded latent space is independent of $S$.
 
 <p align="center">
-!<img src="figures/figure_9.png">
+<img src="figures/figure_9.png">
 </p>
 
 **Figure B.3.1 : Simulated latent space for generating bipartite network $B_{i,j}$. $Z_1 = (T,S)$ is represented in blue. $Z_2$ is represented in red and is independent of $Z_1$.**
@@ -307,7 +307,7 @@ The purpose of this study is to see the temporal gain of using the RFF HSIC inst
 
 ### B.4.1 Setting
 
-For various value of $n$, we consider $X$ a $n\times 4$ matrix, with entries such as $X_{i,j} \sim \mathcal{N}(0,1)$ i.i.d. Let $S$ be a $n \times 4$ matrix. Under the null hypothesis, we consider that $S$ is independent of $X$, with $S_{i,j} \sim \mathcal{N}(0,1)$ i.i.d. Under the alternative hypothesis we consider that $S= 3X$. The aim is to compute the HSIC between $X$ and $S$ with $\hat{HSIC}(X,S)$, with $RFF HSIC(X,S)$ and their respective gradient, under both hypothesis.
+For various value of $n$, we consider $X$ a $n\times 4$ matrix, with entries such as $X_{i,j} \sim \mathcal{N}(0,1)$ i.i.d. Let $S$ be a $n \times 4$ matrix. Under the null hypothesis, we consider that $S$ is independent of $X$, with $S_{i,j} \sim \mathcal{N}(0,1)$ i.i.d. Under the alternative hypothesis we consider that $S= 3X$. The aim is to compute the HSIC between $X$ and $S$ with $\hat{HSIC}(X,S)$, $RFF HSIC(X,S)$ and their respective gradient, under both hypothesis.
 In our fairness setting, $S$ would represent the protected variable and would be fixed once and for all, while $X$ would change according to the computed gradient. Therefore, we evaluate $L_{i,j} = L(s_i,s_j) = e^{-\frac{\Vert s_i-s_j\Vert ^2}{2}}$, $L' = \sum_{1\leq p,q\leq n} L_{q,p}$, and $L''\_{i} = \sum\_{q=1}^n L\_{i,q}$ in advance to perform a quicker computation :  
 
 $$\begin{aligned}
@@ -324,7 +324,7 @@ Using the method presented by Zhang et al. (2018), we also compute the $RFF\ HSI
 ### B.4.2 Results
 
 <p align="center">
-!<img src="figures/figure_11.png">
+<img src="figures/figure_11.png">
 </p>
 
 **Figure B.4.2 : Estimated latent space for the bipartite variational graph auto-encoder (left) and the fair bipartite variational graph auto-encoder (right) in the binary case.**
@@ -335,7 +335,7 @@ Using the method presented by Zhang et al. (2018), we also compute the $RFF\ HSI
 As we can see in Figure B.4.2, using the $RFF\ HSIC$ is much faster than $\widehat{HSIC}$ by a large margin. Under the null hypothesis, the estimation is less accurate than under the alternative hypothesis (Figure B.4.3) but the hypothesis doesn't affect the computation time. For 1000 iterations and for $n=10000$, the $RFF\ HSIC$ and its gradient would require around 7.9 seconds of computation time, while the $\widehat{HSIC}$ would require around 35 minutes. In the Spipoll dataset, we have considered $n=12574$ with a latent space of dimension 4. Using a second order polynomial, we can estimate that computing $1000$ times the HSIC and its gradient would require around 56 minutes for $\widehat{HSIC}$ and 11 seconds for $RFF\ HSIC$. We also only presented results from data in the time period between 2017 and 2020, but if we considered the Spipoll data set from 2010 to 2020, then $n \approx 26000$. In this case, we can estimate that computing $1000$ times the HSIC and its gradient would require around 4 hours with $\widehat{HSIC}$ while the $RFF\ HSIC$ would only need 33 seconds. All these estimations are done without taking into account the fact that the computation of the $n \times n$ Gram matrix, needed for the $\widehat{HSIC}$ can also require a lot of memory from the computer.
 
 <p align="center">
-!<img src="figures/figure_12.png">
+<img src="figures/figure_12.png">
 </p>
 
 **Figure B.4.3 : Estimated latent space for the bipartite variational graph auto-encoder (left) and the fair bipartite variational graph auto-encoder (right) in the binary case.**
@@ -349,7 +349,7 @@ In addition to the reconstructed plant-pollinator network, the
 method provides an embedding of dimension $D = D_+ + D_- = 4$ with $D_+ = D_- = 2$, which means that for the first two dimensions, insects and sessions that are embedded in the same direction are more likely to be connected, and the ones in the opposite direction are less likely to be connected. On the contrary, insects and sessions that are embedded in the same direction for the third and fourth dimensions are less likely to be connected, while the ones in the opposite direction are more likely to be connected. The choice of $D_+ = D_- = 2$ is justified by looking at Figure C.1. The session-pollinator embedding can be seen in Figure C.2 and Figure C.3.
 
 <p align="center">
-!<img src="figures/figure_14.png">
+<img src="figures/figure_14.png">
 </p>
 
 **Figure C.0 : Observed initial plant-pollinator network of the Spipoll dataset.**
@@ -376,13 +376,13 @@ In the paper, we show in detail the results for the case where the latent space 
 ## C.2 Latent space representation
 
 <p align="center">
-!<img src="figures/figure_15.png">
+<img src="figures/figure_15.png">
 </p>
 
 **Figure C.2 : Estimated latent space for the Spipoll data set using BVGAE.**
 
 <p align="center">
-!<img src="figures/figure_16.png">
+<img src="figures/figure_16.png">
 </p>
 
 
