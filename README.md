@@ -203,7 +203,7 @@ In this simulation, we are going to generate bipartite networks made of $n_1=100
 Let $S_i\sim \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \sim \mathcal{N}(0,1)$ i.i.d. for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let 
 
 
-$$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$$.
+$$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right)\in R^{n_2 \times2}$$.
 
  We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \sim \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}\_{D\_+,D\_-}z_{2j}))$ i.i.d.
 
