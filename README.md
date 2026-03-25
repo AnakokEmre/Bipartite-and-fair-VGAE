@@ -147,7 +147,7 @@ to a 4-layer perceptron, which attempts to
 predict the protected variable $S$. The loss is then penalized if the predicted output is correlated with the protected variable. 
 
 <p align="center">
-!<img src="figures/figure_6.png">
+<img src="figures/figure_6.png">
 </p>
 
 **Figure B.1.1 : Simulated latent space for generating bipartite network $B_{i,j}$. $Z_1 = (S,T)$ is represented in blue. $Z_2$ is represented in red and is independent of $Z_1$.**
@@ -188,9 +188,10 @@ An example of the latent space of BVGAE and fair-BVGAE can be seen in figure B.1
  We remind the expression of the variational loss : 
 
 $$\begin{align}
- L  &= \mathbb{E}_{q(Z_1,Z_2|X_1,X_2,B)}[\log p(B|Z_1,Z_2)]- KL[q_1(Z_1|X_1,B)\Vert p_1(Z_1)]\notag\\
- &-KL[q_2(Z_2|X_2,B)\Vert p_2(Z_2)]+ \delta RFF\; HSIC(\mu_1,S)\notag.
+ L  &= \mathbb{E}_{q(Z_1,Z_2|X_1,X_2,B)}[\log p(B|Z_1,Z_2)]- KL[q_1(Z_1|X_1,B)\Vert p_1(Z_1)]\\\
+ &-KL[q_2(Z_2|X_2,B)\Vert p_2(Z_2)]+ \delta RFF\; HSIC(\mu_1,S).
 \end{align}$$
+
 In this expression, $\delta$ is the hyperparameter associated with the $RFF\: HSIC$. 
 Setting $\delta = 0$ yields the same result as fitting the classical BVGAE. The following simulation study is performed to study the impact of this hyperparameter on the different scores.
 
