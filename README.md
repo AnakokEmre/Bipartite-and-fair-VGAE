@@ -8,7 +8,8 @@ Application on the Spipoll dataset, from 2016 to 2020, is available in the spipo
 
 # A. The Linear Embedding Case
 
-$`Xn\times dS`$
+
+$\mathcal{N}$
 
 ## A.1 Overview
 Let $X$ a $n\times d$ matrix and let $S$ be $n \times d_s$ matrix. Without loss of generality, we assume that each column of $X$ has been centered. We wish to perform a one dimensional principal component analysis on $X$ that would yield us a vector $v$ and a lower dimensional embedding of $X$ given by $Xv$ that maximizes the variance. However, we wish to have a latent representation $Xv$ independent of the protected variable $S$.  
@@ -183,7 +184,7 @@ Setting $\delta = 0$ yields the same result as fitting the classical BVGAE. The 
 The settings are nearly identical as in section B.1.1.
 
 In this simulation, we are going to generate bipartite networks made of $n_1=1000$ rows and $n_2 =100$ columns. 
-Let $S_i\sim \cal{N}(0,1)\, i.i.d. $ for $i = 1,\dots,n_1$ and $T_i \overset{i.i.d.}{\sim} \mathcal{N} (0,1)$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$.
+Let $S_i\sim \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \overset{i.i.d.}{\sim} \mathcal{N} (0,1)$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$.
 
 We fit the fair-BVGAE with the variational loss $\mathcal{L}$ with hyperparameter $\delta \in$ \{0, 10, 100, 200, 500, 1000, 2000\}.  
 
