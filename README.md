@@ -34,26 +34,33 @@ can also be obtained by computing the first component of the PCA of $P_{S^\bot}X
 ## A.3 Proof
 
 We can see that:
+
 $$X^\top X = (P_SX + P_{S^\bot}X)^\top (P_SX + P_{S^\bot}X) = (P_SX)^\top P_SX + (P_{S^\bot}X)^\top P_{S^\bot}X$$
 
 and 
+
 $$\Vert S^\top Xv\Vert ^2 = v^\top X^\top S S^\top Xv,$$
 
 thus, we have:
+
 $$L = \frac{1}{n}v ^\top(P_SX)^\top P_SXv + \frac{1}{n} v ^\top(P_{S^\bot}X)^\top P_{S^\bot}Xv + \lambda_1 (1-v^\top v) + \lambda_2 \Vert S^\top Xv\Vert ^2.$$
 
 Deriving the Lagrangian yields:
+
 $$\frac{\partial L}{\partial v} = \frac{2}{n}(P_SX)^\top P_SXv + \frac{2}{n} (P_{S^\bot}X)^\top P_{S^\bot}Xv - 2\lambda_1 v + \lambda_2 2 X^\top S S^\top Xv = 0$$
 
 $$\frac{\partial L}{\partial \lambda_1} = 1-\Vert v\Vert ^2 = 0, \quad \frac{\partial L}{\partial \lambda_2} = \Vert S^\top Xv\Vert ^2 = 0.$$
 
 First, we see that $\Vert S^\top Xv\Vert ^2 = 0 \implies S^\top Xv = 0$, which allows us to plug into the derivative equation:
+
 $$\frac{\partial L}{\partial v} = \frac{2}{n}(P_SX)^\top P_SXv + \frac{2}{n} (P_{S^\bot}X)^\top P_{S^\bot}Xv + 2\lambda_1 v = 0.$$
 
 Moreover, $P_S = S(S^\top S)^{-1}S^\top$, thus $P_SXv = S(S^\top S)^{-1}(S^\top Xv) = 0$. Finally, the derivative simplifies to:
+
 $$\frac{2}{n} (P_{S^\bot}X)^\top P_{S^\bot}Xv - 2\lambda_1 v = 0$$
 
 which is equivalent to searching for $\lambda_1$ and $v$ such that:
+
 $$\frac{1}{n} (P_{S^\bot}X)^\top P_{S^\bot}Xv = \lambda_1 v.$$
 
 in other words, we are looking for the eigenvalues of the covariance matrix of $X$ projected on $S^\top$, which is the same as performing a PCA on  $P_{S^\bot}X$.
@@ -72,11 +79,13 @@ with three different methods, principal component analysis on $X$, principal com
 **Principal component analysis using $X$**
 
   We consider an encoder $f_{W_0}$ with a one layer neural network of 5 input nodes and 2 output nodes, and a decoder $g_{W_1}$ with 2 input nodes and 5 output nodes. We optimize the weights of the auto-encoder with respect to the mean squared error loss: 
+
 $$\mathcal{L} (W_0,W_1) = \frac{1}{n} \Vert g_{W_1}(f_{W_0}(X))-X\Vert . $$
 
 **Principal component analysis using $P_{S^\bot}X$**
 
   We consider an encoder $f_{W_0}$ with a one layer neural network of 5 input nodes and 2 output nodes, and a decoder $g_{W_1}$ with 2 input nodes and 5 output nodes. We optimize the weights of the auto-encoder with respect to the mean squared error loss: 
+
 $$\mathcal{L} (W_0,W_1) = \frac{1}{n} \Vert g_{W_1}(f_{W_0}(P_{S^\bot}X))-X\Vert  .$$
 
 The difference between the precedent model is that the encoder takes as input $P_{S^\bot}X$. In our case, this would erase all effect from the protected variable in the latent space.
@@ -84,7 +93,9 @@ The difference between the precedent model is that the encoder takes as input $P
 **Principal component analysis using $X$ and the HSIC loss**
 
   We consider an encoder $f_{W_0}$ with a one layer neural network of 5 input nodes and 2 output nodes, and a decoder $g_{W_1}$ with 2 input nodes and 5 output nodes. We optimize the weights of the auto-encoder with respect to the MSE and HSIC loss: 
+
 $$\mathcal{L}(W_0, W_1) = \frac{1}{n} \|g_{W_1}(f_{W_0}(X)) - X\| + \delta RFF\, HSIC(f_{W_0}(X), S)$$
+
 Here we have chosen $\delta = 10^5$. 
 
 For all the presented method, we fit the weights using 200 steps of the Adam algorithm with learning rate 0.01. For the HSIC loss, we fit the  algorithm 10 times with different initialization before selecting the one with the lowest HSIC value.
