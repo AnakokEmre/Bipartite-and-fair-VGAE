@@ -66,7 +66,7 @@ in other words, we are looking for the eigenvalues of the covariance matrix of $
 
 ## A.4 Comparison of fair linear embedding
 
-Let  $S_i\sim \mathcal{N}(0,1)$ i.i.d. and $T_i\overset{iid}{\sim}\mathcal{N}(0,1)$ for $i \in 1,\dots,n=1000$. Assume that $S \bot T$ and let $Z = (S,T)$. Let $K_{i,j} \overset{i.i.d.}{\sim} \mathcal{N}(0,9)$ be a $2 \times 5$ matrix. Suppose that we observe the $n \times 5$ matrix $X=ZK$  and the protected variable $S$. 
+Let  $S_i\sim \mathcal{N}(0,1)$ i.i.d. and $T_i\overset{iid}{\sim}\mathcal{N}(0,1)$ for $i \in 1,\dots,n=1000$. Assume that $S \bot T$ and let $Z = (S,T)$. Let $K_{i,j} \sim \mathcal{N}(0,9)$ i.i.d be a $2 \times 5$ matrix. Suppose that we observe the $n \times 5$ matrix $X=ZK$  and the protected variable $S$. 
 
 
 We wish to perform a linear embedding 
@@ -133,7 +133,7 @@ Removing the protected variable $S$ from the original data $X$ has increased the
 ### B.1.1 Setting
 
 In this simulation, we are going to generate bipartite networks made of $n_1=1000$ rows and $n_2 =100$ columns. 
-Let $S_i\overset{i.i.d.}{\sim} \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \overset{i.i.d.}{\sim} \mathcal{N} (0,1)$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$.
+Let $S_i\sim \mathcal{N}(0,1)$ i.i.d. for $i = 1,\dots,n_1$ and $T_i \sim \mathcal{N}(0,1)$ i.i.d.$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$.
 We simulate our bipartite adjacency matrix with a Bernoulli distribution $B_{i,j} \overset{i.i.d.}{\sim} \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.1.1.
 
 First, we fit a classical bipartite and variational graph auto-encoder on $B_{i,j}$. We expect that this auto-encoder would yield a latent representation $\tilde{Z_1}$ correlated with $S$ and $T$. 
@@ -194,7 +194,7 @@ Setting $\delta = 0$ yields the same result as fitting the classical BVGAE. The 
 The settings are nearly identical as in section B.1.1.
 
 In this simulation, we are going to generate bipartite networks made of $n_1=1000$ rows and $n_2 =100$ columns. 
-Let $S_i\sim \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \overset{i.i.d.}{\sim} \mathcal{N} (0,1)$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$.
+Let $S_i\sim \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \sim \mathcal{N}(0,1)$ i.i.d.$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$.
 
 We fit the fair-BVGAE with the variational loss $\mathcal{L}$ with hyperparameter $\delta \in$ \{0, 10, 100, 200, 500, 1000, 2000\}.  
 
@@ -247,7 +247,7 @@ Simulations with a similar setting as in section B.1.1 has been performed with a
 
 
 In this simulation, we are going to generate a bipartite network made of $n_1=1000$ rows and $n_2 =100$ columns. 
-Let $S_i \: {i.i.d.}$ for $i = 1,\dots,n_1$ with a Rademacher distribution ($\mathbb{P}(S_i = -1) = \mathbb{P}(S_i = 1) = \frac{1}{2} $) and $T_i \overset{i.i.d.}{\sim} \mathcal{N} (0,1)$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.3.1.
+Let $S_i \: {i.i.d.}$ for $i = 1,\dots,n_1$ with a Rademacher distribution ($\mathbb{P}(S_i = -1) = \mathbb{P}(S_i = 1) = \frac{1}{2} $) and $T_i \sim \mathcal{N}(0,1)$ i.i.d.$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.3.1.
 
 First, we fit a classical bipartite and variational graph auto-encoder on $B_{i,j}$. We expect that this auto-encoder would yield a latent representation $\tilde{Z_1}$ correlated with $S$ and $T$. 
 We then fit our bipartite and fair auto-encoder to compare the result and see if the yielded latent space is independent of $S$.
@@ -285,7 +285,7 @@ The purpose of this study is to see the temporal gain of using the RFF HSIC inst
 
 ### B.4.1 Setting
 
-For various value of $n$, we consider $X$ a $n\times 4$ matrix, with entries such as $X_{i,j} \overset{i.i.d.}{\sim} \mathcal{N}(0,1)$. Let $S$ be a $n \times 4$ matrix. Under the null hypothesis, we consider that $S$ is independent of $X$, with $S_{i,j} \overset{i.i.d.}{\sim} \mathcal{N}(0,1)$. Under the alternative hypothesis we consider that $S= 3X$. The aim is to compute the HSIC between $X$ and $S$ with $\widehat{HSIC}(X,S)$, $RFF\ HSIC(X,S)$ and their respective gradient, under both hypothesis.
+For various value of $n$, we consider $X$ a $n\times 4$ matrix, with entries such as $X_{i,j} \sim \mathcal{N}(0,1)$ i.i.d.. Let $S$ be a $n \times 4$ matrix. Under the null hypothesis, we consider that $S$ is independent of $X$, with $S_{i,j} \sim \mathcal{N}(0,1)$ i.i.d.. Under the alternative hypothesis we consider that $S= 3X$. The aim is to compute the HSIC between $X$ and $S$ with $\widehat{HSIC}(X,S)$, $RFF\ HSIC(X,S)$ and their respective gradient, under both hypothesis.
 In our fairness setting, $S$ would represent the protected variable and would be fixed once and for all, while $X$ would change according to the computed gradient. Therefore, we evaluate $L_{i,j} = L(s_i,s_j) = e^{-\frac{\Vert s_i-s_j\Vert ^2}{2}}$, $L' = \sum_{1\leq p,q\leq n} L_{q,p}$, and $L''_{i} = \sum_{q =1}^n L_{i,q}$ in advance to perform a quicker computation :  
 
 $$\begin{aligned}
