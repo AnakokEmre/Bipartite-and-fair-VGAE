@@ -204,7 +204,7 @@ Let $S_i\sim \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \sim \mathcal{N}(0
 
 $$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right) \in \mathbb{R}^{n_2 \times 2} $$
 
-$$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right)\in R^{n_2 \times2}$$.
+$$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right)\in R^{n_2 \times 2}$$.
 
  We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \sim \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}\_{D\_+,D\_-}z_{2j}))$ i.i.d.
 
