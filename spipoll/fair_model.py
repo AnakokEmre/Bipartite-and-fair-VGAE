@@ -286,3 +286,17 @@ class BGAT(nn.Module):
         return res
         
 
+class Adversary(nn.Module):
+    def __init__(self,n_sensitive,n_hidden=32):
+        super(Adversary, self).__init__()
+        self.dense1 = nn.Linear(args.hidden2_dim1,n_hidden,bias=True)
+        self.dense2 = nn.Linear(n_hidden,n_hidden,bias=True)
+        self.dense3 = nn.Linear(n_hidden,n_hidden,bias=True)
+        self.dense4 = nn.Linear(n_hidden,n_sensitive,bias=True)
+        
+    def forward(self,Z):
+        s_hat = F.relu(self.dense1(Z))
+        s_hat = F.relu(self.dense2(s_hat))
+        s_hat = F.relu(self.dense3(s_hat))
+        s_hat = self.dense4(s_hat)
+        return(s_hat)

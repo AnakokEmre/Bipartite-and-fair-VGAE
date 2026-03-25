@@ -1,3 +1,4 @@
+#%%
 """
 Created on May 2023
 Original code by Daehan Kim
@@ -25,7 +26,7 @@ from fair_model import *
 from HSIC import *
 import pandas
 
-
+#%%
 adj0=pandas.read_csv("data/net.csv",header=0,sep="\t").to_numpy(dtype=float)
 features01 = pandas.read_csv("data/features.csv",header=0,sep="\t")
 species01 = pandas.read_csv("data/species.csv",header=0,sep="\t")
@@ -114,7 +115,7 @@ S[:,0] = torch.log10(S0[:,0])
 S = (S0-S0.mean(0))/S0.std(0)
 
 import args
-
+#%%
 # init model and optimizer
 
 torch.manual_seed(1)
@@ -122,7 +123,7 @@ model = VBGAE3(adj_norm,species_index,2)
 init_parameters(model)
 
 optimizer = Adam(model.parameters(), lr=args.learning_rate)
-
+#%%
 # train model
 roclist = []
 loss_list= []
@@ -157,7 +158,7 @@ for epoch in pbar:
 
 plt.plot(roclist)
 plt.plot(loss_list)
-
+#%%
 #torch.save(model.state_dict(),"spipoll_results/model")
 #model.load_state_dict(torch.load("model",map_location=torch.device("cpu")))
 
@@ -185,7 +186,7 @@ y = stats.gamma.cdf(x,stat1[3].item(),scale=stat1[4].item())
 plt.plot(x,y)
 plt.axvline(x = stat1[0].item()*n)
 stats.gamma.sf(stat1[0].item()*n, stat1[3].item(), scale=stat1[4].item())
-
+#%%
 ####
 #torch.save(spipoll_results/model.state_dict(),"model")
 #np.savetxt("spipoll_results/A_pred3.csv",A_pred3,delimiter=";")
@@ -201,7 +202,7 @@ optimizer = Adam(model2.parameters(), lr=args.learning_rate)
 roclist = []
 loss_list= []
 
-
+#%%
 torch.manual_seed(2)
 pbar = tqdm(range(int(args.num_epoch)),desc = "Training Epochs")
 for epoch in pbar:
@@ -239,7 +240,7 @@ for epoch in pbar:
 
 plt.plot(roclist)
 plt.plot(loss_list)
-
+#%%
 
 test_roc, test_ap = get_scores(test_edges, test_edges_false, A_pred)
 print("1) End of training!", "test_roc=", "{:.5f}".format(test_roc),

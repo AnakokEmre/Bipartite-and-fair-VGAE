@@ -1,4 +1,6 @@
 
+
+
 import torch
 import torch.nn.functional as F
 from torch.optim import Adam
@@ -376,16 +378,16 @@ plt.show()
 #%%
 
 model = VBGAE3(adj_norm,species_index,2)
-model.load_state_dict(torch.load("spipoll_results/model2",map_location=torch.device("cpu")))
+model.load_state_dict(torch.load("spipoll_results/model",map_location=torch.device("cpu")))
 torch.manual_seed(2)
 _,_,latent_space1,latent_space2,_ = model(features1,features2)
 plant_genus = species01.iloc[:,15]
 plant_genus2 = species01.iloc[:,1]
-plant_genus3 = species01.iloc[:,5]
+plant_genus3 = species01.iloc[:,13]
 
 latent_space1=latent_space1.detach().numpy()
 latent_space2=latent_space2.detach().numpy()
-frame0 = 1.5
+frame0 = 3
 fig,axs = plt.subplots(args.hidden2_dim1-1,args.hidden2_dim1-1,figsize = (15,15))
 
 for i in range(args.hidden2_dim1,):
@@ -397,7 +399,7 @@ for i in range(args.hidden2_dim1,):
         A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus2==1],latent_space1[:,j][plant_genus2==1],
                     label="Leucanthemum",s=4,c="C0")
         A=axs[i,j-1].scatter(latent_space1[:,i][plant_genus3==1],latent_space1[:,j][plant_genus3==1],
-                    label="Rosmarinus",s=4,c="C2")
+                    label="Lavandula",s=4,c="C2")
         axs[i,j-1].scatter(latent_space2[:,i],latent_space2[:,j],
                     s=16,label="Observed insects",
                     marker="^",c="r",alpha=0.5)
@@ -427,3 +429,5 @@ for handle in legend.legend_handles:
 #plt.savefig("spipoll_results/Daucus_Leucanthemum_latent_space.pdf")
 
 
+
+# %%
