@@ -8,6 +8,8 @@ Application on the Spipoll dataset, from 2016 to 2020, is available in the spipo
 
 # A. The Linear Embedding Case
 
+$`X`$
+
 ## A.1 Overview
 Let $X$ a $n\times d$ matrix and let $S$ be $n \times d_s$ matrix. Without loss of generality, we assume that each column of $X$ has been centered. We wish to perform a one dimensional principal component analysis on $X$ that would yield us a vector $v$ and a lower dimensional embedding of $X$ given by $Xv$ that maximizes the variance. However, we wish to have a latent representation $Xv$ independent of the protected variable $S$.  
 
