@@ -204,7 +204,7 @@ Let $S_i\sim \mathcal{N}(0,1)$ for $i = 1,\dots,n_1$ and $T_i \sim \mathcal{N}(0
 
 $$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right) \in \mathbb{R}^{n_2 \times 2} $$
 
-$$Z_{2i} \sim \mathcal{N}\left(\begin{bmatrix} 0\\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\\ 0 & 1 \end{bmatrix}\right)\in R^{n_2 \times 2}$$.
+
 
  We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \sim \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}\_{D\_+,D\_-}z_{2j}))$ i.i.d.
 
@@ -259,7 +259,7 @@ Simulations with a similar setting as in section B.1.1 has been performed with a
 
 
 In this simulation, we are going to generate a bipartite network made of $n_1=1000$ rows and $n_2 =100$ columns. 
-Let $S_i \: {i.i.d.}$ for $i = 1,\dots,n_1$ with a Rademacher distribution ($\mathbb{P}(S_i = -1) = \mathbb{P}(S_i = 1) = \frac{1}{2} $) and $T_i \sim \mathcal{N}(0,1)$ i.i.d.$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.3.1.
+Let $S_i \: {i.i.d.}$ for $i = 1,\dots,n_1$ with a Rademacher distribution ( $\mathbb{P}(S_i = -1) = \mathbb{P}(S_i = 1) = \frac{1}{2}$ ) and $T_i \sim \mathcal{N}(0,1)$ i.i.d.$ for $i = 1,\dots,n_1$ and independent of $S$. We suppose that $S$ is the protected variable. Let $Z_1 = (S,T) \in \mathbb{R}^{n_1 \times 2}$ be the 2-column matrix made with both $S$ and $T$. Let $Z_2\overset{i.i.d.}{\sim} \mathcal{N}\left(\begin{bmatrix} 0\\0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\right)\in \mathbb{R}^{n_2 \times2}$. We simulate our bipartite adjacency matrix with Bernoulli  $B_{i,j} \overset{i.i.d.}{\sim}  \mathcal{B}(sigmoid(z_{1i}^\top\mathbf{I}_{D_+,D_-}z_{2j}))$. A visualization of the simulated latent space is presented in Figure B.3.1.
 
 First, we fit a classical bipartite and variational graph auto-encoder on $B_{i,j}$. We expect that this auto-encoder would yield a latent representation $\tilde{Z_1}$ correlated with $S$ and $T$. 
 We then fit our bipartite and fair auto-encoder to compare the result and see if the yielded latent space is independent of $S$.
